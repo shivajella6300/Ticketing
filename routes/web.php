@@ -28,4 +28,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// Admin routes group
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', function () 
+    {
+        return view('dashboard');
+    })->name('admin.dashboard');
+
+    //Ticketing List 
+    Route::get('/tickets',[TicketController::class,"getTickets"])->name('admin.tickets');
+});
+
+// User routes group
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('user.dashboard');
+    Route::get('/raisedTickets',[TicketController::class,"raisedTickets"]);
+});
+
+
 require __DIR__.'/auth.php';
