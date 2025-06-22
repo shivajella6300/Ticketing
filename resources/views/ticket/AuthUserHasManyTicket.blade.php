@@ -1,0 +1,54 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+           User Has Many Tickets List
+        </h2>
+        <div class="flex justify-end">
+           <button class="bg-red-600 text-black text-sm px-4 py-2 rounded shadow"><a href="{{route('ticket.form')}}">Ticket Raise</a></button>
+        </div>
+    </x-slot>
+
+    <div class="py-6 px-4 max-w-7xl mx-auto">
+        <table id="ticketTable" class="display w-full">
+            <thead>
+                <tr>
+                    <th>Sno</th>
+                    <th>User Name</th>
+                    <th>Ticket_Subject</th>
+                    <th>Ticket_Category</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</x-app-layout>
+
+<!-- Include CDN Scripts -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+   var table =  $('#ticketTable').DataTable({
+        processing: true,
+        serverSide: true,
+              ajax: {
+                    url: "{{route('user.ticketlist') }}",
+                    data: function (data) {
+                        data.Ticket_Status = $('#status_fil').val();
+                    },
+                },
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+            { data: 'User_Name', name: 'User_Name' },
+            { data: 'Ticket_Subject', name: 'Ticket_Subject' },
+            { data: 'Ticket_Category', name: 'Ticket_Category' },
+        ]
+       
+    });
+     $('#status_fil').change(function () {
+                table.draw();
+            });
+     
+});
+</script>

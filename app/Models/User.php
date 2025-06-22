@@ -24,6 +24,13 @@ class User extends Authenticatable
         'role'
     ];
 
+
+    public function UserManyTickets(){
+        return $this->hasMany(Ticket::class,"User_Name","name");
+    }
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

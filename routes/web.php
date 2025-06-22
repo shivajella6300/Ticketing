@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () 
+{
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -35,17 +37,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     {
         return view('dashboard');
     })->name('admin.dashboard');
-
     //Ticketing List 
-    Route::get('/tickets',[TicketController::class,"getTickets"])->name('admin.tickets');
+    Route::get('/getAlltickets', [TicketController::class,  "getAllTickets"])->name('admin.tickets');
+    Route::post('/updateStatus', [TicketController::class,  "updateTicketStatus"])->name('update.ticketStatus');
+    Route::get('/ticket-reponse',[TicketController::class, "TicketManyResponses"])->name('ticket.response');
 });
 
 // User routes group
-Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
-    Route::get('/dashboard', function () {
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () 
+{
+    Route::get('/dashboard', function () 
+    {
         return view('dashboard');
     })->name('user.dashboard');
-    Route::get('/raisedTickets',[TicketController::class,"raisedTickets"]);
+    Route::get('/ticketForm',[TicketController::class, 'ticketForm'])->name('ticket.form');
+    Route::get('/auth-tickets-list',[TicketController::class, "getAuthentTickets"])->name('user.ticketlist');
+    Route::post('/raiseTickets',    [TicketController::class, "raiseTicket"])->name('ticket.raise');
+    Route::get('/userHasManyTickets',[TicketController::class, "userHasManyTickets"])->name('user.hasManyTickets');
 });
 
 
